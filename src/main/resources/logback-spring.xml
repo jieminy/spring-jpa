@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true" scanPeriod="1800 seconds" debug="false">
+	<contextName>jpa</contextName>
+  
+	<!-- 路径 -->
+	<springProperty scope="context" name="logdir" source="log.path"/>
+	<springProperty scope="context" name="name" source="log.name"/>
+	<!--  <property name="logdir" value="D:/logs"/>
+	<property name="name" value="tkboss"/>-->
+    <!-- 定义控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} %contextName [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 输出到文件 -->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logdir}/${name}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logdir}/${name}-%d{yyyy-MM-dd}.%i.zip</fileNamePattern>
+             <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>60MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+  	<root level="warn">
+	    <appender-ref ref="console"/>
+	    <appender-ref ref="file"/>
+    </root>
+    
+    <!--输出Loger配置
+    <logger name="org.hibernate.SQL" level="warn"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="warn"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="warn"/>
+	-->
+
+  	<!--开发环境-->
+    <springProfile  name="default">
+    	<logger name="com.taikang.tkreport" level="debug"/>
+    </springProfile>
+  	<!--测试环境-->
+    <springProfile  name="test">
+    	<logger name="com.taikang.tkreport" level="warn"/>
+    </springProfile>
+    <!--生产-->
+    <springProfile name="product">
+    	<logger name="com.taikang.tkreport" level="debug"/>
+    </springProfile>
+</configuration>
